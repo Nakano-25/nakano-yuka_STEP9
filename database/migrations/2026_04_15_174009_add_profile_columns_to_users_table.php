@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('name_kanji')->after('name');
-            $table->string('name_kana')->after('name_kanji');
+            $table->string('name_kana')->nullable()->after('name_kanji');
+            $table->foreignId('company_id')->nullable()->after('password')->constrained();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['name_kanji', 'name_kana']);
+            $table->dropForeign(['company_id']);
+            $table->dropColumn(['name_kanji', 'name_kana', 'company_id']);
         });
     }
 };

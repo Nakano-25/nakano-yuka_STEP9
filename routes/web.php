@@ -22,10 +22,11 @@ Route::get('/', [ProductController::class, 'index'])->name('home');
 
 // Products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/show', [ProductController::class, 'show'])->name('products.show');
 Route::get('/products/purchase', [ProductController::class, 'purchase'])->name('products.purchase');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create')->middleware('auth');
+Route::post('/products/store', [ProductController::class, 'store'])->name('products.store')->middleware('auth');
 Route::get('/products/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::get('/products/{id}', [ProductController::class, 'show'])->whereNumber('id')->name('products.show');
 
 // Mypage
 Route::get('/mypage', [MypageController::class, 'index'])->name('mypage')->middleware('auth');
