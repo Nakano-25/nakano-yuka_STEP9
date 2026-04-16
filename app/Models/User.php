@@ -31,4 +31,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function likedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'likes');
+    }
 }

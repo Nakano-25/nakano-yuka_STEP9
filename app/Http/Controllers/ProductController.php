@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductSearchRequest;
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -37,7 +38,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('company')->findOrFail($id);
 
         return view('products.show', compact('product'));
     }
@@ -75,6 +76,24 @@ class ProductController extends Controller
         ]);
 
         return redirect()->route('mypage')->with('success', '商品を登録しました。');
+    }
+
+    public function toggleLike($id)
+    {
+        $product = Product::findOrFail($id);
+        $user = Auth::user();
+
+        if ($product->likedBy($user)) {
+            $product->likedUsers()->detach($user->id);
+            $liked = false;
+        } else {
+            $product->likedUsers()->attach($user->id);
+            $liked = true;
+        }
+
+        return response()->json([
+            'liked' => $liked,
+        ]);
     }
 
     public function edit()

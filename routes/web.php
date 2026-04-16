@@ -27,6 +27,7 @@ Route::get('/products/create', [ProductController::class, 'create'])->name('prod
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store')->middleware('auth');
 Route::get('/products/edit', [ProductController::class, 'edit'])->name('products.edit');
 Route::get('/products/{id}', [ProductController::class, 'show'])->whereNumber('id')->name('products.show');
+Route::post('/products/{id}/like', [ProductController::class, 'toggleLike'])->name('products.like')->middleware('auth');
 
 // Mypage
 Route::get('/mypage', [MypageController::class, 'index'])->name('mypage')->middleware('auth');

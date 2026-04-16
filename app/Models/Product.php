@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,4 +20,23 @@ class Product extends Model
         'description',
         'img_path',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function likedUsers()
+    {
+        return $this->belongsToMany(User::class, 'likes');
+    }
+
+    public function likedBy($user)
+    {
+        if (!$user) {
+            return false;
+        }
+
+        return $this->likedUsers()->where('user_id', $user->id)->exists();
+    }
 }

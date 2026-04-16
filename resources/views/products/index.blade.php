@@ -3,7 +3,7 @@
 @section('title', '商品一覧')
 
 @section('content')
-    <h2 class="mb-4">商品一覧</h2>
+    <h2 class="mb-4  fw-bold">商品一覧</h2>
     
     <div class="col-lg-11 mx-auto">
     <form method="GET" action="{{ route('products.index') }}" class="mb-4">
