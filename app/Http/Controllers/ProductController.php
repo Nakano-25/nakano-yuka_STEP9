@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductSearchRequest;
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductPurchaseRequest;
 use App\Models\Product;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -43,13 +46,53 @@ class ProductController extends Controller
         return view('products.show', compact('product'));
     }
 
-    public function purchase()
+    public function purchase($id)
     {
-        return view('products.purchase');
+    $product = Product::with('company')->findOrFail($id);
+
+    return view('products.purchase', compact('product'));
+    }
+
+    public function storePurchase(ProductPurchaseRequest $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $user = Auth::user();
+        $data = $request->validated();
+        $quantity = $data['quantity'];
+
+        if ($product->stock <= 0) {
+            return redirect()->route('products.show', $product->id)
+                ->with('error', '在庫切れです。');
+        }
+        
+        if ($quantity > $product->stock) {
+            return back()->withErrors([
+                'quantity' => '在庫数を超えて購入できません。',
+            ])->withInput();
+        }
+
+        DB::transaction(function () use ($user, $product, $quantity) {
+            Sale::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+            ]);
+
+            $product->decrement('stock', $quantity);
+        });
+
+        return redirect()->route('products.index')->with('success', '商品を購入しました。');
     }
 
     public function create()
     {
+        $user = Auth::user();
+
+        if (!$user || !$user->company_id) {
+            return redirect()->route('mypage')
+                ->with('error', '会社情報を登録してから商品登録してください');
+        }
+
         return view('products.create');
     }
 
@@ -78,6 +121,27 @@ class ProductController extends Controller
         return redirect()->route('mypage')->with('success', '商品を登録しました。');
     }
 
+    public function showMyProduct($id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('mypage.product_show', compact('product'));
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $product->delete();
+
+        return redirect()->route('mypage')
+            ->with('success', '商品を削除しました');
+    }
+
     public function toggleLike($id)
     {
         $product = Product::findOrFail($id);
@@ -96,8 +160,32 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit()
+    public function edit($id)
     {
-        return view('products.edit');
+        $product = Product::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(ProductStoreRequest $request, $id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $data = $request->validated();
+
+        if ($request->hasFile('img_path')) {
+            $data['img_path'] = $request->file('img_path')->store('products', 'public');
+        } else {
+            $data['img_path'] = $product->img_path;
+        }
+
+        $product->update($data);
+
+        return redirect()->route('products.my.show', $product->id)
+            ->with('success', '商品を更新しました');
     }
 }

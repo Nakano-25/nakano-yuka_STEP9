@@ -32,7 +32,7 @@
                     <button id="like-btn" class="border-0 bg-transparent p-0"
                             data-product-id="{{ $product->id }}"
                             data-like-url="{{ route('products.like', $product->id) }}">
-                        <i class="{{ $product->likedBy(Auth::user()) ? 'fa-solid' : 'fa-regular' }} fa-heart fs-2 text-danger"></i>
+                            <i class="{{ $product->likedBy(Auth::user()) ? 'fa-solid text-danger' : 'fa-regular text-secondary' }} fa-heart fs-2"></i>
                     </button>
                 @endauth
 
@@ -45,7 +45,7 @@
             </div>
 
             <div class="d-flex gap-2">
-                <a href="{{ route('products.purchase') }}" class="btn btn-primary btn-lg">カートに追加する</a>
+                <a href="{{ route('products.purchase', $product->id) }}" class="btn btn-primary btn-lg">カートに追加する</a>
                 <a href="{{ route('products.index') }}" class="btn btn-secondary btn-lg">戻る</a>
             </div>
         </div>

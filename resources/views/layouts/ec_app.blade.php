@@ -47,6 +47,35 @@
         </div>
     </header>
 
+    <div class="container mt-3">
+
+    @if(session('success'))
+    <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <script>
+    setTimeout(() => {
+        const el = document.getElementById('success-message');
+        if (el) el.remove();
+    }, 3000);
+    </script>
+
+    </div>
+
     <main class="container py-4">
         @yield('content')
     </main>

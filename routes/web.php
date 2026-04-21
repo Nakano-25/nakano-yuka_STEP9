@@ -22,16 +22,19 @@ Route::get('/', [ProductController::class, 'index'])->name('home');
 
 // Products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/purchase', [ProductController::class, 'purchase'])->name('products.purchase');
+Route::get('/products/{id}/purchase', [ProductController::class, 'purchase'])->whereNumber('id')->name('products.purchase')->middleware('auth');
+Route::post('/products/{id}/purchase', [ProductController::class, 'storePurchase'])->whereNumber('id')->name('products.purchase.store')->middleware('auth');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create')->middleware('auth');
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store')->middleware('auth');
-Route::get('/products/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->whereNumber('id')->name('products.edit')->middleware('auth');
+Route::put('/products/{id}', [ProductController::class, 'update'])->whereNumber('id')->name('products.update')->middleware('auth');
 Route::get('/products/{id}', [ProductController::class, 'show'])->whereNumber('id')->name('products.show');
 Route::post('/products/{id}/like', [ProductController::class, 'toggleLike'])->name('products.like')->middleware('auth');
 
 // Mypage
 Route::get('/mypage', [MypageController::class, 'index'])->name('mypage')->middleware('auth');
-Route::get('/mypage/product-show', [MypageController::class, 'productShow'])->name('mypage.product.show');
+Route::get('/mypage/products/{id}', [ProductController::class, 'showMyProduct'])->whereNumber('id')->name('products.my.show')->middleware('auth');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 // Account
 Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit');
