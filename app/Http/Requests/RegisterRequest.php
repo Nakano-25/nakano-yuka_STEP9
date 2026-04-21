@@ -23,23 +23,4 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    public function messages(): array
-    {
-        return [
-            'name_kanji.regex' => '名前（漢字）は全角で入力してください。',
-            'name_kana.regex' => '名前（カナ）は全角カタカナで入力してください。',
-            'password.confirmed' => 'パスワードとパスワード（確認用）が一致しません。',
-        ];
-    }
-
-    public function attributes(): array
-    {
-        return [
-            'name' => 'Name（ユーザー名）',
-            'name_kanji' => '名前（漢字）',
-            'name_kana' => '名前（カナ）',
-            'email' => 'メールアドレス',
-            'password' => 'パスワード',
-        ];
-    }
 }

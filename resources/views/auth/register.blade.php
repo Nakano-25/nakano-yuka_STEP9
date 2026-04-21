@@ -96,7 +96,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                                <a href="{{ route('login') }}" class="btn btn-secondary">back</a>
                             </div>
+
                         </div>
                     </form>
                 </div>

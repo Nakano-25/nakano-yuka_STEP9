@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductPurchaseRequest extends FormRequest
+class AccountUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,7 +15,10 @@ class ProductPurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1'],
+            'name' => ['required', 'string', 'max:255'],
+            'name_kanji' => ['required', 'string', 'max:255'],
+            'name_kana' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
         ];
     }
 

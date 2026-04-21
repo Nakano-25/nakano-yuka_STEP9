@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductSearchRequest extends FormRequest
+class ContactRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +15,9 @@ class ProductSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_name' => ['nullable', 'string', 'max:255'],
-            'min_price' => ['nullable', 'integer', 'min:0'],
-            'max_price' => ['nullable', 'integer', 'min:0', 'gte:min_price'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'message' => ['required', 'string'],
         ];
     }
 

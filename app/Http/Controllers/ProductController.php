@@ -121,7 +121,7 @@ class ProductController extends Controller
         return redirect()->route('mypage')->with('success', '商品を登録しました。');
     }
 
-    public function showMyProduct($id)
+    public function myShow($id)
     {
         $product = Product::where('id', $id)
             ->where('user_id', Auth::id())

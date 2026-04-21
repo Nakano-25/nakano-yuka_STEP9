@@ -33,11 +33,13 @@ Route::post('/products/{id}/like', [ProductController::class, 'toggleLike'])->na
 
 // Mypage
 Route::get('/mypage', [MypageController::class, 'index'])->name('mypage')->middleware('auth');
-Route::get('/mypage/products/{id}', [ProductController::class, 'showMyProduct'])->whereNumber('id')->name('products.my.show')->middleware('auth');
+Route::get('/mypage/products/{id}', [ProductController::class, 'myShow'])->whereNumber('id')->name('products.my.show')->middleware('auth');
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 // Account
-Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit');
+Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit')->middleware('auth');
+Route::put('/account/edit', [AccountController::class, 'update'])->name('account.update')->middleware('auth');
 
 // Contact
 Route::get('/contact', [ContactController::class, 'form'])->name('contact.form');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
