@@ -31,7 +31,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('名前 (漢字)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name_kanji" type="text" class="form-control @error('name') is-invalid @enderror" name="name_kanji" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name_kanji" type="text" class="form-control @error('name_kanji') is-invalid @enderror" name="name_kanji" value="{{ old('name_kanji') }}" required autocomplete="name" autofocus>
 
                                 @error('name_kanji')
                                     <span class="invalid-feedback" role="alert">
@@ -45,7 +45,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('名前 (カナ)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name_kana" type="text" class="form-control @error('name') is-invalid @enderror" name="name_kana" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name_kana" type="text" class="form-control @error('name_kana') is-invalid @enderror" name="name_kana" value="{{ old('name_kana') }}" required autocomplete="name" autofocus>
 
                                 @error('name_kana')
                                     <span class="invalid-feedback" role="alert">

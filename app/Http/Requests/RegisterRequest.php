@@ -23,4 +23,12 @@ class RegisterRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name_kanji.regex' => '名前（漢字）は全角文字で入力してください。',
+            'name_kana.regex' => '名前（カナ）は全角カタカナで入力してください。',
+        ];
+    }
+
 }

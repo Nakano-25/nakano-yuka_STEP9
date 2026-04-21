@@ -3,6 +3,7 @@
 return [
 
     'required' => ':attribute は必須です。',
+    'regex' => ':attribute の形式が正しくありません。',
     'string' => ':attribute は文字列で入力してください。',
     'max' => ['string' => ':attribute は :max 文字以内で入力してください。',],
     'min' => ['string' => ':attribute は :min 文字以上で入力してください。',],
