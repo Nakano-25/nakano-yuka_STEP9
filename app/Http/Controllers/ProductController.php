@@ -57,31 +57,18 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $user = Auth::user();
-        $data = $request->validated();
-        $quantity = $data['quantity'];
+        $quantity = $request->validated()['quantity'];
 
-        if ($product->stock <= 0) {
-            return redirect()->route('products.show', $product->id)
-                ->with('error', '在庫切れです。');
-        }
-        
-        if ($quantity > $product->stock) {
+        try {
+            $product->purchase($user->id, $quantity);
+        } catch (\Exception $e) {
             return back()->withErrors([
-                'quantity' => '在庫数を超えて購入できません。',
+                'quantity' => $e->getMessage(),
             ])->withInput();
         }
 
-        DB::transaction(function () use ($user, $product, $quantity) {
-            Sale::create([
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'quantity' => $quantity,
-            ]);
-
-            $product->decrement('stock', $quantity);
-        });
-
-        return redirect()->route('products.index')->with('success', '商品を購入しました。');
+        return redirect()->route('products.index')
+            ->with('success', '商品を購入しました。');
     }
 
     public function create()
